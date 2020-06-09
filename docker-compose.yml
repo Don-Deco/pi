@@ -1,0 +1,63 @@
+version: '2.1'
+
+services:
+  transmission:
+    image: linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1080
+      - PGID=1080
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /home/pi/transmission/config/:/config
+      - /media/plex/downloads/:/downloads
+    restart: unless-stopped
+  
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    volumes:
+      - /dev/rtc:/dev/rtc:ro
+      - /media/plex/tvseries:/tv
+      - /home/pi/sonarr/config:/config
+      - /media/plex/downloads/:/downloads
+    environment:
+      - PUID=1080
+      - PGID=1080
+      - TZ=Europe/Amsterdam
+    # ports for local unauthenticated communication
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    depends_on:
+      - transmission
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    volumes:
+      - /dev/rtc:/dev/rtc:ro
+      - /media/plex/movies:/movies
+      - /home/pi/radarr/config:/config
+      - /media/plex/downloads/:/downloads
+    environment:
+      - PUID=1080
+      - PGID=1080
+      - TZ=Europe/Amsterdam
+    # ports for local unauthenticated communication
+    ports:
+      - 7878:7878
+    depends_on:
+      - transmission
+
+  jackett:
+    image: linuxserver/jackett:latest
+    container_name: jackett
+    volumes:
+      - /home/pi/jackett/config/:/config
+      - /media/plex/downloads/:/downloads
+    environment:
+      - PUID=1080
+      - PGID=1080
+      - TZ=Europe/Amsterdam
+    restart: unless-stopped
