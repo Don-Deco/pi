@@ -5,12 +5,14 @@ services:
     image: linuxserver/transmission:latest
     container_name: transmission
     environment:
-      - PUID="$(id -u)"
-      - PGID="$(id -g)"
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/Amsterdam
     volumes:
       - /home/pi/transmission/config/:/config
       - /media/plex/downloads/:/downloads
+    ports:
+      - 9091:9091
     restart: unless-stopped
   
   sonarr:
@@ -22,8 +24,8 @@ services:
       - /home/pi/sonarr/config:/config
       - /media/plex/downloads/:/downloads
     environment:
-      - PUID="$(id -u)"
-      - PGID="$(id -g)"
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/Amsterdam
     # ports for local unauthenticated communication
     ports:
@@ -41,14 +43,15 @@ services:
       - /home/pi/radarr/config:/config
       - /media/plex/downloads/:/downloads
     environment:
-      - PUID="$(id -u)"
-      - PGID="$(id -g)"
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/Amsterdam
     # ports for local unauthenticated communication
     ports:
       - 7878:7878
     depends_on:
       - transmission
+    restart: unless-stopped
 
   jackett:
     image: linuxserver/jackett:latest
@@ -57,7 +60,10 @@ services:
       - /home/pi/jackett/config/:/config
       - /media/plex/downloads/:/downloads
     environment:
-      - PUID="$(id -u)"
-      - PGID="$(id -g)"
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/Amsterdam
+    ports:
+      - 9117:9117
     restart: unless-stopped
+
