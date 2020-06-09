@@ -53,6 +53,20 @@ services:
       - transmission
     restart: unless-stopped
 
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+#      - BASE_URL=/ombi #optional
+    volumes:
+      - /home/pi/ombi:/config
+    ports:
+      - 3579:3579
+    restart: unless-stopped
+
   jackett:
     image: linuxserver/jackett:latest
     container_name: jackett
