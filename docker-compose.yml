@@ -5,8 +5,8 @@ services:
     image: linuxserver/transmission:latest
     container_name: transmission
     environment:
-      - PUID=1080
-      - PGID=1080
+      - PUID="$(id -u)"
+      - PGID="$(id -g)"
       - TZ=Europe/Amsterdam
     volumes:
       - /home/pi/transmission/config/:/config
@@ -22,8 +22,8 @@ services:
       - /home/pi/sonarr/config:/config
       - /media/plex/downloads/:/downloads
     environment:
-      - PUID=1080
-      - PGID=1080
+      - PUID="$(id -u)"
+      - PGID="$(id -g)"
       - TZ=Europe/Amsterdam
     # ports for local unauthenticated communication
     ports:
@@ -41,8 +41,8 @@ services:
       - /home/pi/radarr/config:/config
       - /media/plex/downloads/:/downloads
     environment:
-      - PUID=1080
-      - PGID=1080
+      - PUID="$(id -u)"
+      - PGID="$(id -g)"
       - TZ=Europe/Amsterdam
     # ports for local unauthenticated communication
     ports:
@@ -57,7 +57,7 @@ services:
       - /home/pi/jackett/config/:/config
       - /media/plex/downloads/:/downloads
     environment:
-      - PUID=1080
-      - PGID=1080
+      - PUID="$(id -u)"
+      - PGID="$(id -g)"
       - TZ=Europe/Amsterdam
     restart: unless-stopped
